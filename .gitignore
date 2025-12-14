@@ -1,0 +1,41 @@
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+*-Copy*.ipynb
+
+# Large data files
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.parquet
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+*.egg
+.venv/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log

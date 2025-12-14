@@ -1,36 +1,34 @@
 #!/bin/bash
 # getall - Pull latest updates for data science repository
+# Compatible with Linux and macOS
 
 set -euo pipefail
 
-# Colors for output
+# Colors for output (using printf for portability)
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Pulling Data Science Updates ===${NC}"
-echo ""
+printf "${BLUE}=== Pulling Data Science Updates ===${NC}\n\n"
 
 # Get current repository
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-echo "Updating: $(basename "$REPO_DIR")"
-echo ""
+printf "Updating: %s\n\n" "$(basename "$REPO_DIR")"
 
 cd "$REPO_DIR"
 
 # Stash any local changes
-if git stash push -u -m "auto-stash $(date +%F_%T)" 2>&1 | grep -q "No local changes"; then
-  echo "  No local changes to stash"
+if git stash push -u -m "auto-stash $(date '+%Y-%m-%d_%H%M%S')" 2>&1 | grep -q "No local changes"; then
+  printf "  No local changes to stash\n"
 else
-  echo "  Stashed local changes"
+  printf "  Stashed local changes\n"
 fi
 
 # Pull with fast-forward only
-if git pull --ff-only; then
-  echo "  Successfully pulled latest changes"
+if git pull --ff-only 2>/dev/null; then
+  printf "  Successfully pulled latest changes\n"
 else
-  echo "  Note: Could not fast-forward (local changes exist)"
+  printf "  Note: Could not fast-forward (local changes exist or no remote)\n"
 fi
 
-echo ""
-echo -e "${GREEN}=== Update Complete ===${NC}"
+printf "\n${GREEN}=== Update Complete ===${NC}\n"

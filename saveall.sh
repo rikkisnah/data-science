@@ -1,31 +1,31 @@
 #!/bin/bash
 # saveall - Save data science projects and sync with GitHub
+# Compatible with Linux and macOS
 
 set -e  # Exit on error
 
-# Colors for output
+# Colors for output (using printf for portability)
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}=== Data Science Portfolio Sync ===${NC}"
-echo "Repository: data-science"
-echo "Host: $(hostname)"
-echo "Time: $(date '+%Y-%m-%d %H:%M:%S')"
-echo ""
+printf "${BLUE}=== Data Science Portfolio Sync ===${NC}\n"
+printf "Repository: data-science\n"
+printf "Host: %s\n" "$(hostname)"
+printf "Time: %s\n\n" "$(date '+%Y-%m-%d %H:%M:%S')"
 
 # Change to script directory
 cd "$(dirname "$0")"
 
 # Check for uncommitted changes
-echo -e "${BLUE}Checking for changes...${NC}"
+printf "${BLUE}Checking for changes...${NC}\n"
 if git diff --quiet && git diff --cached --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
-    echo "No changes to commit"
+    printf "No changes to commit\n"
 else
-    echo "Changes detected"
+    printf "Changes detected\n"
 
     # Stage all changes
-    echo -e "${BLUE}Staging changes...${NC}"
+    printf "${BLUE}Staging changes...${NC}\n"
     git add -A
 
     # Get diff summary for commit message
@@ -38,16 +38,16 @@ Summary of changes:
 $DIFF_SUMMARY"
 
     # Commit
-    echo -e "${BLUE}Committing changes...${NC}"
+    printf "${BLUE}Committing changes...${NC}\n"
     git commit -m "$COMMIT_MSG"
 fi
 
 # Pull latest from remote (rebase to avoid merge commits)
-echo -e "${BLUE}Pulling latest from remote...${NC}"
-git pull --rebase || echo "No remote configured or unable to pull"
+printf "${BLUE}Pulling latest from remote...${NC}\n"
+git pull --rebase 2>/dev/null || printf "No remote configured or unable to pull\n"
 
 # Push to GitHub
-echo -e "${BLUE}Pushing to GitHub...${NC}"
-git push || echo "No remote configured or unable to push"
+printf "${BLUE}Pushing to GitHub...${NC}\n"
+git push || printf "No remote configured or unable to push\n"
 
-echo -e "${GREEN}✓ Data science portfolio synced${NC}"
+printf "${GREEN}✓ Data science portfolio synced${NC}\n"
