@@ -9,7 +9,7 @@ JUPYTER      := $(VENV)/bin/jupyter
 NOTEBOOK     := notebooks/potential-customers-prediction.ipynb
 HTML_OUTPUT  := outputs/potential-customers-prediction.html
 
-.PHONY: help install jupyter run export-html clean
+.PHONY: help install jupyter lab classic run export-html clean
 
 help: ## Show available targets
 	@echo "Potential Customers Prediction"
@@ -23,16 +23,22 @@ install: ## Install Jupyter and project dependencies into venv
 	@test -d $(VENV) || python3 -m venv $(VENV)
 	@echo "Installing/upgrading dependencies..."
 	$(PIP) install --upgrade pip
-	$(PIP) install jupyter notebook ipykernel \
-		numpy pandas matplotlib seaborn scikit-learn
+	$(PIP) install jupyter notebook nbclassic ipykernel \
+		numpy pandas matplotlib seaborn scikit-learn xgboost
 	$(PYTHON) -m ipykernel install --user --name rikkisnah --display-name "Python (rikkisnah)"
 	@echo ""
-	@echo "Done. Run 'make jupyter' to launch the notebook."
+	@echo "Done. Run 'make jupyter', 'make lab', or 'make classic' to launch."
 
 jupyter: ## Launch Jupyter Notebook (opens browser)
 	$(JUPYTER) notebook $(NOTEBOOK)
 
-run: jupyter ## Alias for jupyter
+lab: ## Launch JupyterLab (modern UI)
+	$(JUPYTER) lab $(NOTEBOOK)
+
+classic: ## Launch classic Jupyter Notebook UI (nbclassic)
+	$(JUPYTER) nbclassic $(NOTEBOOK)
+
+run: jupyter ## Alias for jupyter (Notebook UI)
 
 export-html: ## Export notebook to HTML (for submission)
 	$(JUPYTER) nbconvert --to html --output-dir=outputs \
